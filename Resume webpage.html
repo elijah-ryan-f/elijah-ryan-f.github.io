@@ -1,0 +1,585 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Interactive online resume for Elijah R. Schellhardt" />
+  <title>Elijah R. Schellhardt — Interactive Resume</title>
+
+  <style>
+    :root{
+      --bg:#0b0f17; --panel:#101827; --panel2:#0f1624; --text:#e7edf6; --muted:#aab6c7;
+      --brand:#7aa7ff; --ok:#5eead4; --warn:#fbbf24; --bad:#fb7185;
+      --line:rgba(255,255,255,.10); --shadow: 0 12px 35px rgba(0,0,0,.35);
+      --radius: 18px; --radius2: 12px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    [data-theme="light"]{
+      --bg:#f6f7fb; --panel:#ffffff; --panel2:#fbfbff; --text:#0b1320; --muted:#4b5563;
+      --brand:#2563eb; --ok:#0f766e; --warn:#b45309; --bad:#be123c;
+      --line:rgba(0,0,0,.10); --shadow: 0 10px 30px rgba(0,0,0,.10);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background: radial-gradient(1000px 500px at 20% -10%, rgba(122,167,255,.18), transparent 60%),
+                  radial-gradient(900px 500px at 90% 10%, rgba(94,234,212,.10), transparent 60%),
+                  var(--bg);
+      color:var(--text);
+      font-family: var(--sans);
+      line-height:1.45;
+    }
+    a{color:inherit}
+    .wrap{max-width:1100px;margin:0 auto;padding:26px 18px 80px}
+    header{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;align-items:start;margin-top:10px}
+    @media (max-width: 920px){header{grid-template-columns:1fr}}
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00)) , var(--panel);
+      border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden;
+    }
+    .pad{padding:18px}
+    .topline{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px}
+    .name{display:flex;flex-direction:column;gap:6px}
+    .name h1{margin:0;font-size:28px;letter-spacing:.2px}
+    .subtitle{color:var(--muted);font-size:14px}
+    .badge-row{display:flex;gap:8px;flex-wrap:wrap}
+    .badge{
+      font-size:12px;padding:6px 10px;border-radius:999px;
+      background: rgba(122,167,255,.12); border:1px solid rgba(122,167,255,.28);
+      color:var(--text);white-space:nowrap;
+    }
+    .badge.ok{background: rgba(94,234,212,.10); border-color: rgba(94,234,212,.25)}
+    .badge.warn{background: rgba(251,191,36,.10); border-color: rgba(251,191,36,.25)}
+    .badge.mono{font-family: var(--mono)}
+    .btn-row{display:flex;gap:10px;flex-wrap:wrap}
+    button,.btn{
+      appearance:none;border:1px solid var(--line);background:var(--panel2);color:var(--text);
+      padding:10px 12px;border-radius:12px;cursor:pointer;font-weight:600;font-size:13px;
+      display:inline-flex;gap:8px;align-items:center;transition:transform .05s ease,border-color .15s ease,background .15s ease;
+      user-select:none;text-decoration:none;
+    }
+    button:hover,.btn:hover{border-color: rgba(122,167,255,.45)}
+    button:active,.btn:active{transform: translateY(1px)}
+    .btn.primary{background: rgba(122,167,255,.16);border-color: rgba(122,167,255,.35)}
+    .btn.ghost{background: transparent}
+    .mini{font-size:12px;padding:8px 10px;border-radius:11px}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width: 640px){.grid2{grid-template-columns:1fr}}
+    .contact{display:grid;gap:10px}
+    .contact .row{
+      display:flex;justify-content:space-between;gap:12px;align-items:center;
+      padding:10px 12px;border-radius:var(--radius2);background:var(--panel2);border:1px solid var(--line);
+    }
+    .contact .label{color:var(--muted);font-size:12px}
+    .contact code{font-family:var(--mono);font-size:12px}
+    .toast{
+      position:fixed;inset:auto 18px 18px auto;padding:10px 12px;border-radius:12px;
+      background: rgba(16,24,39,.92); border:1px solid rgba(255,255,255,.12); color:#fff; box-shadow:var(--shadow);
+      font-size:13px; opacity:0; transform: translateY(10px); pointer-events:none; transition:opacity .2s ease, transform .2s ease;
+      z-index:9999;
+    }
+    [data-theme="light"] .toast{background: rgba(17,24,39,.92)}
+    .toast.show{opacity:1;transform: translateY(0)}
+
+    .main{margin-top:18px;display:grid;grid-template-columns:320px 1fr;gap:18px}
+    @media (max-width: 920px){.main{grid-template-columns:1fr}}
+    .side .pad{padding:14px}
+    .side h3,.content h3{margin:0 0 10px 0;font-size:14px;letter-spacing:.2px}
+    .muted{color:var(--muted)}
+    .kpi{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .kpi .box{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:12px}
+    .kpi .big{font-size:18px;font-weight:800}
+    .kpi .small{font-size:12px;color:var(--muted)}
+    .pillset{display:flex;gap:8px;flex-wrap:wrap}
+    .pill{
+      font-size:12px;padding:7px 10px;border-radius:999px;background: rgba(255,255,255,.03);
+      border:1px solid var(--line);cursor:pointer;transition:border-color .15s ease, background .15s ease;
+    }
+    .pill:hover{border-color: rgba(122,167,255,.45)}
+    .pill.active{background: rgba(122,167,255,.14);border-color: rgba(122,167,255,.38)}
+
+    .tabs{
+      display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--line);
+      padding:10px 10px 0;background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0));
+    }
+    .tab{
+      padding:10px 12px;border-radius:12px 12px 0 0;background:transparent;border:1px solid transparent;
+      cursor:pointer;font-weight:800;font-size:13px;color:var(--muted);
+    }
+    .tab.active{color:var(--text);background:var(--panel);border-color:var(--line);border-bottom-color:transparent}
+    .panel{padding:16px}
+    .section{margin-bottom:16px}
+    .section h4{margin:0 0 10px 0;font-size:13px;letter-spacing:.2px;color:var(--muted);text-transform:uppercase}
+    .item{
+      background:var(--panel2);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px
+    }
+    .item .head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline}
+    .item .title{font-weight:900;font-size:14px}
+    .item .meta{color:var(--muted);font-size:12px}
+    .item ul{margin:10px 0 0 18px;padding:0}
+    .item li{margin:6px 0}
+    .search{display:flex;gap:10px;align-items:center;margin:8px 0 14px;flex-wrap:wrap}
+    .search input{
+      flex:1 1 240px;background:var(--panel2);border:1px solid var(--line);border-radius:14px;
+      padding:10px 12px;color:var(--text);font-size:13px;outline:none
+    }
+    .search input:focus{border-color: rgba(122,167,255,.55)}
+    .hint{font-size:12px;color:var(--muted);margin-top:6px}
+    details{border:1px solid var(--line);border-radius:16px;background:var(--panel2);padding:12px 14px}
+    details summary{
+      cursor:pointer;font-weight:900;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px
+    }
+    details summary::-webkit-details-marker{display:none}
+    details .details-body{padding-top:10px}
+    .footer{margin-top:16px;font-size:12px;color:var(--muted);text-align:center}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  </style>
+</head>
+
+<body>
+  <div class="wrap" id="app" data-theme="dark">
+    <header>
+      <section class="card">
+        <div class="pad">
+          <div class="topline">
+            <div class="name">
+              <h1>Elijah R. Schellhardt (Fernandez)</h1>
+              <div class="subtitle">
+                Senior Systems Engineer • SCRUM Master • Systems Test & Operations (DoD/USMC)
+              </div>
+            </div>
+
+            <div class="btn-row">
+              <button class="btn ghost mini" id="themeBtn" title="Toggle theme">🌓 Theme</button>
+              <button class="btn ghost mini" id="printBtn" title="Print / Save to PDF">🖨️ Print</button>
+              <button class="btn primary mini" id="copySummaryBtn" title="Copy a short summary">📋 Copy Summary</button>
+            </div>
+          </div>
+
+          <div class="badge-row">
+            <span class="badge warn">Active DoD Secret Clearance</span>
+            <span class="badge ok">Agile / Scrum Master</span>
+            <span class="badge">Jira Administration</span>
+            <span class="badge mono">Linux • Windows • VMware</span>
+            <span class="badge">Distributed Systems</span>
+            <span class="badge">Layer 1–3 Networking</span>
+            <span class="badge">Testing & Automation</span>
+          </div>
+
+          <div style="margin-top:14px" class="grid2">
+            <div class="item" style="margin:0">
+              <div class="title">Professional Snapshot</div>
+              <div class="meta">Engineering + delivery leadership in mission-critical environments</div>
+              <ul>
+                <li>Senior Systems Engineer and SCRUM Master supporting USMC/DoD programs; drives execution, visibility, and repeatable processes.</li>
+                <li>Experienced in Jira workflows/dashboards/automation, systems integration, distributed infrastructure, and test operations.</li>
+                <li>Known for clear documentation, operational readiness discipline, and keeping multi-team workstreams aligned.</li>
+              </ul>
+            </div>
+
+            <div class="item" style="margin:0">
+              <div class="title">Highlights</div>
+              <div class="meta">Quantified accomplishments</div>
+              <ul>
+                <li>Managed <strong>50+ Linux servers</strong> and <strong>100+ client systems</strong> in 24/7 operations.</li>
+                <li>Delivered <strong>1,000+ hours</strong> of technical training to personnel from <strong>19 allied nations</strong>.</li>
+                <li>Executed system upgrades/deployments valued at <strong>$11M</strong>.</li>
+                <li>Accountable for <strong>$97M</strong> in systems assets with <strong>zero loss</strong>; led and developed teams (12+), with 16 advancing into leadership.</li>
+              </ul>
+            </div>
+          </div>
+
+          <p class="hint">Tip: Use tabs, skill search/filter, and expand items for details.</p>
+        </div>
+      </section>
+
+      <aside class="card">
+        <div class="pad">
+          <h3>Contact</h3>
+          <div class="contact">
+            <div class="row">
+              <div>
+                <div class="label">Email</div>
+                <code id="emailText">elijah.schellhardt@gmail.com</code>
+              </div>
+              <button class="btn mini" data-copy="#emailText">Copy</button>
+            </div>
+
+            <div class="row">
+              <div>
+                <div class="label">Location</div>
+                <code id="locText">Clovis, CA</code>
+              </div>
+              <button class="btn mini" data-copy="#locText">Copy</button>
+            </div>
+
+            <div class="row">
+              <div>
+                <div class="label">LinkedIn</div>
+                <code id="liText">linkedin.com/in/elijah-ryan-f/</code>
+              </div>
+              <button class="btn mini" data-copy="#liText">Copy</button>
+            </div>
+
+            <div class="row">
+              <div>
+                <div class="label">Portfolio / GitHub</div>
+                <code id="ghText">add-your-portfolio-link</code>
+              </div>
+              <button class="btn mini" data-copy="#ghText">Copy</button>
+            </div>
+          </div>
+
+          <p class="hint">Replace “Portfolio/GitHub” if you want it shown.</p>
+        </div>
+      </aside>
+    </header>
+
+    <main class="main">
+      <aside class="card side">
+        <div class="pad">
+          <h3>At-a-glance</h3>
+          <div class="kpi">
+            <div class="box"><div class="big">Systems</div><div class="small">Engineering + Sustainment</div></div>
+            <div class="box"><div class="big">Agile</div><div class="small">Scrum / Delivery</div></div>
+            <div class="box"><div class="big">DoD</div><div class="small">USMC Programs</div></div>
+            <div class="box"><div class="big">Test</div><div class="small">Automation + Validation</div></div>
+          </div>
+
+          <div style="height:12px"></div>
+
+          <h3>Quick Filters</h3>
+          <div class="pillset" id="skillFilters">
+            <span class="pill active" data-filter="all">All</span>
+            <span class="pill" data-filter="agile">Agile</span>
+            <span class="pill" data-filter="systems">Systems</span>
+            <span class="pill" data-filter="infra">Infra</span>
+            <span class="pill" data-filter="test">Testing</span>
+            <span class="pill" data-filter="docs">Docs/Reporting</span>
+          </div>
+
+          <div style="height:14px"></div>
+
+          <h3>Extras</h3>
+          <div class="item" style="margin:0">
+            <ul>
+              <li>Dashboards, SITREPs, and clean workflows</li>
+              <li>Photography as a “visual diary” for family memories</li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+
+      <section class="card content">
+        <div class="tabs" role="tablist" aria-label="Resume sections">
+          <button class="tab active" role="tab" aria-selected="true" aria-controls="tab-experience" id="t-experience">Experience</button>
+          <button class="tab" role="tab" aria-selected="false" aria-controls="tab-skills" id="t-skills">Skills</button>
+          <button class="tab" role="tab" aria-selected="false" aria-controls="tab-education" id="t-education">Education</button>
+          <button class="tab" role="tab" aria-selected="false" aria-controls="tab-certs" id="t-certs">Certs</button>
+        </div>
+
+        <!-- EXPERIENCE -->
+        <section class="panel" id="tab-experience" role="tabpanel" aria-labelledby="t-experience">
+          <div class="section">
+            <h4>Professional Experience</h4>
+
+            <div class="item">
+              <div class="head">
+                <div class="title">Senior Systems Engineer / SCRUM Master — Expeditionary Technical Solutions Inc (MCTSSA)</div>
+                <div class="meta">Camp Pendleton, CA • Mar 2025 – Present</div>
+              </div>
+              <ul>
+                <li>Lead Agile ceremonies and engineering coordination routines to keep cross-team deliverables on track (planning, refinement, reviews, retros).</li>
+                <li>Program-level Jira administration: workflows, dashboards, automation rules, permissions, and reporting for multi-team operations.</li>
+                <li>Facilitate readiness checkpoints, delivery milestones, and risk reviews supporting sustainment and engineering operations.</li>
+                <li>Standardize workflows and documentation (checklists, runbooks) to improve transparency and execution consistency.</li>
+              </ul>
+            </div>
+
+            <div class="item">
+              <div class="head">
+                <div class="title">Systems Test Engineer / SCRUM Master — i3Tech Data Solutions (MCTSSA)</div>
+                <div class="meta">Camp Pendleton, CA • Sep 2020 – Feb 2025</div>
+              </div>
+              <ul>
+                <li>Facilitated Agile processes across concurrent test efforts; improved execution cadence and visibility.</li>
+                <li>Served as Jira administrator: boards/epics/components, automation rules, dashboards, and reporting.</li>
+                <li>Executed automated + manual testing (Eggplant Automation), improving repeatability and validation coverage.</li>
+                <li>Built test plans, acceptance criteria, and reproducible procedures for Windows, Linux, virtualized, and distributed environments.</li>
+                <li>Designed/implemented lab network architecture hosting full Battalion/Division/Regiment JTCW suites (layer 1–3).</li>
+              </ul>
+            </div>
+
+            <div class="item">
+              <div class="head">
+                <div class="title">Field Service Engineer III — Ultra Electronics Advanced Tactical Systems</div>
+                <div class="meta">Austin, TX • Mar 2015 – Apr 2020</div>
+              </div>
+              <ul>
+                <li>Managed and maintained <strong>50+ Linux servers</strong> and <strong>100+ client systems</strong> in a 24/7 mission-critical operations center.</li>
+                <li>Delivered <strong>1,000+ hours</strong> of technical training to personnel from <strong>19 allied nations</strong>.</li>
+                <li>Executed multi-million-dollar system upgrades/hardware integrations/deployments valued at <strong>$11M</strong>.</li>
+                <li>Implemented quarterly IA updates for Linux/Windows (STIGs/IAVAs) and provided global help desk support.</li>
+              </ul>
+            </div>
+
+            <div class="item">
+              <div class="head">
+                <div class="title">Tactical Data Systems Administrator (Sergeant) — United States Marine Corps (MCTSSA)</div>
+                <div class="meta">Camp Pendleton, CA • Jan 2010 – Feb 2015</div>
+              </div>
+              <ul>
+                <li>Led, trained, and developed a technical team of <strong>12+</strong>; contributed to <strong>16 Marines</strong> advancing into leadership roles.</li>
+                <li>Managed <strong>$97M</strong> in communication/data systems assets with <strong>zero loss</strong> while maintaining high readiness.</li>
+                <li>Installed/configured/maintained Cisco-based communication systems; improved reliability in dynamic operational environments.</li>
+                <li>Delivered senior-level briefings and created technical documentation for diverse stakeholders.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- SKILLS -->
+        <section class="panel" id="tab-skills" role="tabpanel" aria-labelledby="t-skills" hidden>
+          <div class="section">
+            <h4>Skills</h4>
+
+            <div class="search">
+              <label class="sr-only" for="skillSearch">Search skills</label>
+              <input id="skillSearch" type="search" placeholder="Search skills (e.g., Jira, VMware, Linux, Scrum, Eggplant)..." />
+              <button class="btn mini" id="clearSearch">Clear</button>
+            </div>
+
+            <div id="skillsList">
+              <div class="item" data-tags="agile docs">
+                <div class="head"><div class="title">Agile / Program Delivery</div><div class="meta">Scrum • execution • stakeholder visibility</div></div>
+                <ul>
+                  <li>Agile/SCRUM, backlog management, sprint planning, delivery milestones</li>
+                  <li>Risk & roadmap tracking, readiness/go-no-go criteria, cross-functional coordination</li>
+                  <li>Jira administration: workflows, dashboards, automations, permissions, reporting</li>
+                </ul>
+              </div>
+
+              <div class="item" data-tags="systems infra">
+                <div class="head"><div class="title">Systems / Infrastructure</div><div class="meta">Linux • Windows • virtualization • distributed systems</div></div>
+                <ul>
+                  <li>Linux (Red Hat), Unix; Windows / Windows Server; Active Directory</li>
+                  <li>VMware, vSphere, ESXi; distributed/virtualized test environments</li>
+                  <li>Cisco networking; layer 1–3 design; multi-site networks</li>
+                </ul>
+              </div>
+
+              <div class="item" data-tags="test">
+                <div class="head"><div class="title">Testing / Automation / Tooling</div><div class="meta">repeatability • validation • documentation</div></div>
+                <ul>
+                  <li>Test planning & execution; automated + manual testing</li>
+                  <li>Eggplant Automation; workflow automation; operational dashboards</li>
+                  <li>Confluence, Bitbucket; ticketing/work mgmt tools (e.g., TRMC, Serena, IBM Jazz)</li>
+                </ul>
+              </div>
+
+              <div class="item" data-tags="docs">
+                <div class="head"><div class="title">Leadership / Communication</div><div class="meta">training • briefings • runbooks</div></div>
+                <ul>
+                  <li>Team leadership & mentorship; training and technical enablement</li>
+                  <li>Executive briefings; technical documentation & runbooks; change management</li>
+                  <li>Customer & partner support; expectation management in high-pressure environments</li>
+                </ul>
+              </div>
+            </div>
+
+            <p class="hint">Use the left filters + search to quickly tailor the view for different roles.</p>
+          </div>
+        </section>
+
+        <!-- EDUCATION -->
+        <section class="panel" id="tab-education" role="tabpanel" aria-labelledby="t-education" hidden>
+          <div class="section">
+            <h4>Education</h4>
+
+            <div class="item">
+              <div class="head"><div class="title">Associate in Science for Transfer — Business Administration</div><div class="meta">Clovis Community College • Dec 2025</div></div>
+            </div>
+
+            <div class="item">
+              <div class="head"><div class="title">Associate in Science — Business Administration, Information Systems Management</div><div class="meta">Clovis Community College • In Progress (Expected Aug 2026)</div></div>
+            </div>
+
+            <div class="item">
+              <div class="head"><div class="title">High School Diploma</div><div class="meta">Frederick, MD • Jun 2008</div></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CERTS -->
+        <section class="panel" id="tab-certs" role="tabpanel" aria-labelledby="t-certs" hidden>
+          <div class="section">
+            <h4>Training & Certifications</h4>
+
+            <div class="item">
+              <div class="head"><div class="title">CompTIA Security+</div><div class="meta">Listed (earlier resume notes “expired”)</div></div>
+            </div>
+
+            <div class="item">
+              <div class="head"><div class="title">ADSI • CAC2S • JADOCS 1</div><div class="meta">DoD/USMC systems training</div></div>
+            </div>
+
+            <div class="item">
+              <div class="head"><div class="title">Military Instructor Certification</div><div class="meta">Instructor / training enablement</div></div>
+            </div>
+
+            <details>
+              <summary>Additional courses (expand) <span class="muted">expand</span></summary>
+              <div class="details-body">
+                <ul>
+                  <li>Tactical Data Systems Administrator Course</li>
+                  <li>Basic Electronics Course</li>
+                  <li>Marine Corps Institute: Leadership, Records Management, Cyber Awareness, DoD Information Assurance, DoD Safety & Occupational Health</li>
+                </ul>
+              </div>
+            </details>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <div class="footer">
+      Single-file interactive resume (HTML + CSS + JS). Add a portfolio link anytime.
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+
+    const toastEl = $("#toast");
+    let toastTimer = null;
+    function toast(msg){
+      toastEl.textContent = msg;
+      toastEl.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(()=> toastEl.classList.remove("show"), 1700);
+    }
+
+    async function copyText(text){
+      try{
+        await navigator.clipboard.writeText(text);
+        toast("Copied!");
+      }catch(e){
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
+        toast("Copied!");
+      }
+    }
+
+    // Theme
+    const app = $("#app");
+    const storedTheme = localStorage.getItem("resume_theme");
+    if(storedTheme) app.setAttribute("data-theme", storedTheme);
+
+    $("#themeBtn").addEventListener("click", () => {
+      const next = app.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      app.setAttribute("data-theme", next);
+      localStorage.setItem("resume_theme", next);
+      toast(`Theme: ${next}`);
+    });
+
+    // Print
+    $("#printBtn").addEventListener("click", () => window.print());
+
+    // Copy summary
+    $("#copySummaryBtn").addEventListener("click", () => {
+      const summary =
+`Elijah R. Schellhardt (Fernandez) — Senior Systems Engineer / Scrum Master (Active DoD Secret).
+DoD/USMC programs | Jira administration | Linux/Windows/VMware | Testing & automation (Eggplant).
+Highlights: 50+ Linux servers, 100+ clients; 1,000+ training hours to 19 allied nations; $11M upgrades; $97M assets managed w/ zero loss.`;
+      copyText(summary);
+    });
+
+    // Copy buttons
+    $$("[data-copy]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const target = $(btn.getAttribute("data-copy"));
+        const text = target ? target.textContent.trim() : "";
+        if(text) copyText(text);
+      });
+    });
+
+    // Tabs
+    const tabs = $$(".tab");
+    const panels = [
+      $("#tab-experience"),
+      $("#tab-skills"),
+      $("#tab-education"),
+      $("#tab-certs")
+    ];
+
+    function activateTab(tabId){
+      tabs.forEach(t => {
+        const active = t.id === tabId;
+        t.classList.toggle("active", active);
+        t.setAttribute("aria-selected", String(active));
+      });
+      panels.forEach(p => p.hidden = true);
+
+      const tab = $("#"+tabId);
+      const panelId = tab.getAttribute("aria-controls");
+      $("#"+panelId).hidden = false;
+
+      localStorage.setItem("resume_tab", tabId);
+    }
+
+    tabs.forEach(t => t.addEventListener("click", () => activateTab(t.id)));
+    const storedTab = localStorage.getItem("resume_tab");
+    if(storedTab && $("#"+storedTab)) activateTab(storedTab);
+
+    // Skills filter + search
+    const skillFilters = $$("#skillFilters .pill");
+    const skillsList = $("#skillsList");
+    const skillItems = $$(".item", skillsList);
+    const searchBox = $("#skillSearch");
+    const clearSearch = $("#clearSearch");
+    let activeFilter = "all";
+
+    function applySkillFilters(){
+      const q = (searchBox.value || "").trim().toLowerCase();
+      skillItems.forEach(item => {
+        const tags = (item.getAttribute("data-tags") || "").split(/\s+/).filter(Boolean);
+        const text = item.textContent.toLowerCase();
+        const matchesFilter = (activeFilter === "all") || tags.includes(activeFilter);
+        const matchesSearch = (!q) || text.includes(q);
+        item.style.display = (matchesFilter && matchesSearch) ? "" : "none";
+      });
+    }
+
+    skillFilters.forEach(p => {
+      p.addEventListener("click", () => {
+        skillFilters.forEach(x => x.classList.remove("active"));
+        p.classList.add("active");
+        activeFilter = p.getAttribute("data-filter");
+        activateTab("t-skills");
+        applySkillFilters();
+        toast(activeFilter === "all" ? "Skills: All" : `Skills: ${activeFilter}`);
+      });
+    });
+
+    if(searchBox){
+      searchBox.addEventListener("input", applySkillFilters);
+      clearSearch.addEventListener("click", () => {
+        searchBox.value = "";
+        applySkillFilters();
+        toast("Search cleared");
+        searchBox.focus();
+      });
+    }
+  </script>
+</body>
+</html>
