@@ -38,13 +38,7 @@
     header{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;align-items:start;margin-top:10px}
     @media (max-width: 920px){header{grid-template-columns:1fr}}
 
-    /* Stack cards in the right header column */
-    .header-right{
-      display:flex;
-      flex-direction:column;
-      gap:18px;
-    }
-    /* Slightly tighter padding for stacked header cards */
+    .header-right{display:flex;flex-direction:column;gap:18px}
     .header-right .pad{ padding:16px; }
 
     .card{
@@ -52,10 +46,12 @@
       border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden;
     }
     .pad{padding:18px}
+
     .topline{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px}
     .name{display:flex;flex-direction:column;gap:6px}
     .name h1{margin:0;font-size:28px;letter-spacing:.2px}
     .subtitle{color:var(--muted);font-size:14px}
+
     .badge-row{display:flex;gap:8px;flex-wrap:wrap}
     .badge{
       font-size:12px;padding:6px 10px;border-radius:999px;
@@ -65,6 +61,7 @@
     .badge.ok{background: rgba(94,234,212,.10); border-color: rgba(94,234,212,.25)}
     .badge.warn{background: rgba(251,191,36,.10); border-color: rgba(251,191,36,.25)}
     .badge.mono{font-family: var(--mono)}
+
     .btn-row{display:flex;gap:10px;flex-wrap:wrap}
     button,.btn{
       appearance:none;border:1px solid var(--line);background:var(--panel2);color:var(--text);
@@ -77,8 +74,10 @@
     .btn.primary{background: rgba(122,167,255,.16);border-color: rgba(122,167,255,.35)}
     .btn.ghost{background: transparent}
     .mini{font-size:12px;padding:8px 10px;border-radius:11px}
+
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     @media (max-width: 640px){.grid2{grid-template-columns:1fr}}
+
     .contact{display:grid;gap:10px}
     .contact .row{
       display:flex;justify-content:space-between;gap:12px;align-items:center;
@@ -87,10 +86,28 @@
     .contact .label{color:var(--muted);font-size:12px}
     .contact code{font-family:var(--mono);font-size:12px}
 
-    /* Quick links buttons */
     .linkgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
     @media (max-width: 420px){.linkgrid{grid-template-columns:1fr}}
     .btn.full{width:100%;justify-content:center}
+
+    /* Photo card (top-right above contact) */
+    .photo-wrap{display:flex;justify-content:center;align-items:center}
+    .profile-photo{
+      width:170px;
+      height:170px;
+      border-radius:18px;
+      object-fit:cover;
+      border:1px solid rgba(122,167,255,.35);
+      box-shadow: 0 10px 26px rgba(0,0,0,.35);
+      background: rgba(255,255,255,.03);
+    }
+    @media (max-width: 520px){
+      .profile-photo{
+        width:120px;
+        height:120px;
+        border-radius:16px;
+      }
+    }
 
     .toast{
       position:fixed;inset:auto 18px 18px auto;padding:10px 12px;border-radius:12px;
@@ -106,17 +123,11 @@
     .side .pad{padding:14px}
     .side h3,.content h3{margin:0 0 10px 0;font-size:14px;letter-spacing:.2px}
     .muted{color:var(--muted)}
+
     .kpi{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     .kpi .box{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:12px}
     .kpi .big{font-size:18px;font-weight:800}
     .kpi .small{font-size:12px;color:var(--muted)}
-    .pillset{display:flex;gap:8px;flex-wrap:wrap}
-    .pill{
-      font-size:12px;padding:7px 10px;border-radius:999px;background: rgba(255,255,255,.03);
-      border:1px solid var(--line);cursor:pointer;transition:border-color .15s ease, background .15s ease;
-    }
-    .pill:hover{border-color: rgba(122,167,255,.45)}
-    .pill.active{background: rgba(122,167,255,.14);border-color: rgba(122,167,255,.38)}
 
     .tabs{
       display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--line);
@@ -127,9 +138,11 @@
       cursor:pointer;font-weight:800;font-size:13px;color:var(--muted);
     }
     .tab.active{color:var(--text);background:var(--panel);border-color:var(--line);border-bottom-color:transparent}
+
     .panel{padding:16px}
     .section{margin-bottom:16px}
     .section h4{margin:0 0 10px 0;font-size:13px;letter-spacing:.2px;color:var(--muted);text-transform:uppercase}
+
     .item{
       background:var(--panel2);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px
     }
@@ -138,6 +151,7 @@
     .item .meta{color:var(--muted);font-size:12px}
     .item ul{margin:10px 0 0 18px;padding:0}
     .item li{margin:6px 0}
+
     .search{display:flex;gap:10px;align-items:center;margin:8px 0 14px;flex-wrap:wrap}
     .search input{
       flex:1 1 240px;background:var(--panel2);border:1px solid var(--line);border-radius:14px;
@@ -145,12 +159,14 @@
     }
     .search input:focus{border-color: rgba(122,167,255,.55)}
     .hint{font-size:12px;color:var(--muted);margin-top:6px}
+
     details{border:1px solid var(--line);border-radius:16px;background:var(--panel2);padding:12px 14px}
     details summary{
       cursor:pointer;font-weight:900;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px
     }
     details summary::-webkit-details-marker{display:none}
     details .details-body{padding-top:10px}
+
     .footer{margin-top:16px;font-size:12px;color:var(--muted);text-align:center}
     .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
   </style>
@@ -212,12 +228,19 @@
             </div>
           </div>
 
-          <p class="hint">Tip: Use tabs, skill search/filter, and expand items for details.</p>
+          <p class="hint">Tip: Use tabs, and the Skills search bar to filter skills.</p>
         </div>
       </section>
 
-      <!-- RIGHT: STACKED (CONTACT + AT-A-GLANCE + QUICK LINKS + QUICK FILTERS) -->
+      <!-- RIGHT: STACKED (PHOTO + CONTACT + AT-A-GLANCE + QUICK LINKS) -->
       <div class="header-right">
+        <!-- PHOTO (TOP RIGHT ABOVE CONTACT) -->
+        <aside class="card">
+          <div class="pad photo-wrap">
+            <img class="profile-photo" src="profile.jpg" alt="Elijah R. Schellhardt profile photo">
+          </div>
+        </aside>
+
         <aside class="card">
           <div class="pad">
             <h3>Contact</h3>
@@ -268,27 +291,13 @@
               <button class="btn full" id="jumpEducation">Education</button>
               <button class="btn full" id="jumpCerts">Certs</button>
             </div>
-
-            <div style="height:12px"></div>
-
-            <h3>Quick Filters</h3>
-            <div class="pillset" id="skillFilters">
-              <span class="pill active" data-filter="all">All</span>
-              <span class="pill" data-filter="agile">Agile</span>
-              <span class="pill" data-filter="systems">Systems</span>
-              <span class="pill" data-filter="infra">Infra</span>
-              <span class="pill" data-filter="test">Testing</span>
-              <span class="pill" data-filter="docs">Docs/Reporting</span>
-            </div>
-
-            <p class="hint" style="margin-bottom:0">Tip: Select a filter to jump into Skills.</p>
           </div>
         </aside>
       </div>
     </header>
 
     <main class="main">
-      <!-- LEFT SIDEBAR (now just Extras) -->
+      <!-- LEFT SIDEBAR (Extras) -->
       <aside class="card side">
         <div class="pad">
           <h3>Extras</h3>
@@ -381,7 +390,7 @@
             </div>
 
             <div id="skillsList">
-              <div class="item" data-tags="agile docs">
+              <div class="item">
                 <div class="head"><div class="title">Agile / Program Delivery</div><div class="meta">Scrum • execution • stakeholder visibility</div></div>
                 <ul>
                   <li>Agile/SCRUM, backlog management, sprint planning, delivery milestones</li>
@@ -390,7 +399,7 @@
                 </ul>
               </div>
 
-              <div class="item" data-tags="systems infra">
+              <div class="item">
                 <div class="head"><div class="title">Systems / Infrastructure</div><div class="meta">Linux • Windows • virtualization • distributed systems</div></div>
                 <ul>
                   <li>Linux (Red Hat), Unix; Windows / Windows Server; Active Directory</li>
@@ -399,7 +408,7 @@
                 </ul>
               </div>
 
-              <div class="item" data-tags="test">
+              <div class="item">
                 <div class="head"><div class="title">Testing / Automation / Tooling</div><div class="meta">repeatability • validation • documentation</div></div>
                 <ul>
                   <li>Test planning & execution; automated + manual testing</li>
@@ -408,7 +417,7 @@
                 </ul>
               </div>
 
-              <div class="item" data-tags="docs">
+              <div class="item">
                 <div class="head"><div class="title">Leadership / Communication</div><div class="meta">training • briefings • runbooks</div></div>
                 <ul>
                   <li>Team leadership & mentorship; training and technical enablement</li>
@@ -418,7 +427,7 @@
               </div>
             </div>
 
-            <p class="hint">Use the filter pills or search to tailor the view for different roles.</p>
+            <p class="hint">Use the search bar to filter the skills cards above.</p>
           </div>
         </section>
 
@@ -578,41 +587,25 @@ Highlights: 50+ Linux servers, 100+ clients; 1,000+ training hours to 19 allied 
     const storedTab = localStorage.getItem("resume_tab");
     if(storedTab && $("#"+storedTab)) activateTab(storedTab);
 
-    // Skills filter + search
-    const skillFilters = $$("#skillFilters .pill");
+    // Skills search (kept)
     const skillsList = $("#skillsList");
-    const skillItems = $$(".item", skillsList);
+    const skillItems = skillsList ? $$(".item", skillsList) : [];
     const searchBox = $("#skillSearch");
     const clearSearch = $("#clearSearch");
-    let activeFilter = "all";
 
-    function applySkillFilters(){
+    function applySkillsSearch(){
       const q = (searchBox.value || "").trim().toLowerCase();
       skillItems.forEach(item => {
-        const tags = (item.getAttribute("data-tags") || "").split(/\s+/).filter(Boolean);
         const text = item.textContent.toLowerCase();
-        const matchesFilter = (activeFilter === "all") || tags.includes(activeFilter);
-        const matchesSearch = (!q) || text.includes(q);
-        item.style.display = (matchesFilter && matchesSearch) ? "" : "none";
+        item.style.display = (!q || text.includes(q)) ? "" : "none";
       });
     }
 
-    skillFilters.forEach(p => {
-      p.addEventListener("click", () => {
-        skillFilters.forEach(x => x.classList.remove("active"));
-        p.classList.add("active");
-        activeFilter = p.getAttribute("data-filter");
-        activateTab("t-skills");
-        applySkillFilters();
-        toast(activeFilter === "all" ? "Skills: All" : `Skills: ${activeFilter}`);
-      });
-    });
-
     if(searchBox){
-      searchBox.addEventListener("input", applySkillFilters);
+      searchBox.addEventListener("input", applySkillsSearch);
       clearSearch.addEventListener("click", () => {
         searchBox.value = "";
-        applySkillFilters();
+        applySkillsSearch();
         toast("Search cleared");
         searchBox.focus();
       });
@@ -621,7 +614,10 @@ Highlights: 50+ Linux servers, 100+ clients; 1,000+ training hours to 19 allied 
     // Quick Links -> jump to tabs
     function jumpTo(tabId){
       activateTab(tabId);
-      window.scrollTo({ top: document.querySelector(".content").offsetTop - 10, behavior: "smooth" });
+      const content = document.querySelector(".content");
+      if(content){
+        window.scrollTo({ top: content.offsetTop - 10, behavior: "smooth" });
+      }
     }
 
     const je = document.getElementById("jumpExperience");
@@ -636,4 +632,3 @@ Highlights: 50+ Linux servers, 100+ clients; 1,000+ training hours to 19 allied 
   </script>
 </body>
 </html>
-
